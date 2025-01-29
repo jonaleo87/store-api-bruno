@@ -1,0 +1,21 @@
+meta {
+  name: getAll
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: https://api.escuelajs.co/graphql
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  {
+    users{
+  		id
+  		name
+  		email
+    }
+  }
+}

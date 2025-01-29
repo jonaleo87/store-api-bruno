@@ -1,0 +1,21 @@
+meta {
+  name: login
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: https://api.escuelajs.co/graphql
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  mutation {
+  	login(email: "john@mail.com", password: "changeme") {
+  		access_token
+  		refresh_token
+  	}
+  }
+  
+}

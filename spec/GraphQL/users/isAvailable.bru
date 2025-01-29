@@ -1,0 +1,18 @@
+meta {
+  name: isAvailable
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: https://api.escuelajs.co/graphql
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  query {
+  	isAvailable(email: "john@mail.com")
+  }
+  
+}

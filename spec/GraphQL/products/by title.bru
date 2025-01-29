@@ -1,0 +1,20 @@
+meta {
+  name: by title
+  type: graphql
+  seq: 7
+}
+
+post {
+  url: https://api.escuelajs.co/graphql
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  {
+    products(title: "Generic"){
+      title
+      price
+    }
+  }
+}

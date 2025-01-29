@@ -1,0 +1,26 @@
+meta {
+  name: myProfile
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: https://api.escuelajs.co/graphql
+  body: graphql
+  auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTY3Mjc4MDE1OCwiZXhwIjoxNjc0NTA4MTU4fQ._UdU1WdRNaLW1sow633WEhKdxmdiFsJen-J2pjKgqu8
+}
+
+body:graphql {
+  {
+  	myProfile {
+  		id
+  		name
+  		avatar
+  	}
+  }
+  
+}

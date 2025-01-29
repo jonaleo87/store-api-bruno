@@ -1,0 +1,18 @@
+meta {
+  name: delete
+  type: graphql
+  seq: 5
+}
+
+post {
+  url: https://api.escuelajs.co/graphql
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  mutation {
+  	deleteProduct(id: 112)
+  }
+  
+}

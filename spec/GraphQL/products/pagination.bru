@@ -1,0 +1,20 @@
+meta {
+  name: pagination
+  type: graphql
+  seq: 6
+}
+
+post {
+  url: https://api.escuelajs.co/graphql
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  {
+    products(limit: 2, offset: 0){
+      title
+      price
+    }
+  }
+}

@@ -1,0 +1,22 @@
+meta {
+  name: update
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: https://api.escuelajs.co/graphql
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  mutation {
+  	updateUser(id: 1, changes: { name: "change" }) {
+  		id
+  		name
+  		avatar
+  	}
+  }
+  
+}

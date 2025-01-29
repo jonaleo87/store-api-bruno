@@ -1,0 +1,28 @@
+meta {
+  name: getAll
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: https://api.escuelajs.co/graphql
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  {
+    products{
+  		id
+      title
+      price
+  		description
+  		images
+  		category {
+  			id
+  			name
+  			image
+  		}
+    }
+  }
+}

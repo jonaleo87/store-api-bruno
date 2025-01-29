@@ -1,0 +1,22 @@
+meta {
+  name: update
+  type: graphql
+  seq: 4
+}
+
+post {
+  url: https://api.escuelajs.co/graphql
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  mutation {
+  	updateProduct(id: "120", changes: { title: "udpate" }) {
+  		title
+  		price
+  		images
+  	}
+  }
+  
+}
