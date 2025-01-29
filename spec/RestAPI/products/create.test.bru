@@ -1,0 +1,100 @@
+meta {
+  name: create
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://api.escuelajs.co/api/v1/products/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "title": "New Product",
+      "price": 10,
+      "description": "A description",
+      "categoryId": 1,
+      "images": [
+          "https://placeimg.com/640/480/any"
+      ]
+  }
+}
+
+tests {
+  test("CP01|Validar que el método del request sea POST", () => {
+    const data = req.getMethod();
+    expect(data).to.equal('POST');
+  })
+  
+  test("CP02|Validar que el status de la respuesta sea 201", () => {
+    const data = res.getStatus();
+    expect(data).to.equal(201);
+  })
+  
+  test("CP03|Validar que el tiempo de respuesta sea menor a 2 segundos", () => {
+    const responseTime = res.getResponseTime();
+    expect(responseTime).to.be.lessThan(2000);
+  })
+  
+  test("CP04|Validar que existan todas las propiedades principales de la respuesta", () => {
+    const response = res.getBody();
+    expect(response).to.be.an('object');
+    expect(response).to.include.keys([
+      'id',
+      'title',
+      'price',
+      'description',
+      'category',
+      'images',
+      'creationAt',
+      'updatedAt'
+    ]);
+  })
+  
+  test("CP05|Validar que las propiedades principales tengan los tipos de datos esperados", () => {
+    const response = res.getBody();
+    expect(response.id).to.be.a('number');
+    expect(response.title).to.be.a('string');
+    expect(response.price).to.be.a('number');
+    expect(response.description).to.be.a('string');
+    expect(response.category).to.be.an('object');
+    expect(response.images).to.be.an('array');
+    expect(response.creationAt).to.be.a('string');
+    expect(response.updatedAt).to.be.a('string');
+  })
+  
+  test("CP06|Validar que el body del request contenga las propiedades necesarias", () => {
+    const requestBody = req.getBody();
+    expect(requestBody).to.include.keys([
+      'title',
+      'price',
+      'description',
+      'categoryId',
+      'images'
+    ]);
+    expect(requestBody.title).to.be.a('string');
+    expect(requestBody.price).to.be.a('number');
+    expect(requestBody.description).to.be.a('string');
+    expect(requestBody.categoryId).to.be.a('number');
+    expect(requestBody.images).to.be.an('array');
+  })
+  
+  test("CP07|Validar que el objeto category tenga las propiedades esperadas", () => {
+    const response = res.getBody();
+    const category = response.category;
+    expect(category).to.include.keys([
+      'id',
+      'name',
+      'image',
+      'creationAt',
+      'updatedAt'
+    ]);
+    expect(category.id).to.be.a('number');
+    expect(category.name).to.be.a('string');
+    expect(category.image).to.be.a('string');
+    expect(category.creationAt).to.be.a('string');
+    expect(category.updatedAt).to.be.a('string');
+  })
+}

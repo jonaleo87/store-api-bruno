@@ -1,0 +1,78 @@
+meta {
+  name: getAll
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://api.escuelajs.co/api/v1/products/
+  body: none
+  auth: none
+}
+
+tests {
+  test("CP01|Validar que el método del request sea GET", () => {
+    const data = req.getMethod();
+    expect(data).to.equal('GET');
+  })
+  
+  test("CP02|Validar que el status de la respuesta sea 200", () => {
+    const data = res.getStatus();
+    expect(data).to.equal(200);
+  })
+  
+  test("CP03|Validar que el tiempo de respuesta sea menor a 2 segundos", () => {
+    const responseTime = res.getResponseTime();
+    expect(responseTime).to.be.lessThan(2000);
+  })
+  
+  test("CP04|Validar que existan todas las propiedades principales de la respuesta", () => {
+    const response = res.getBody();
+    expect(response).to.be.an('array');
+    response.forEach(product => {
+      expect(product).to.include.keys([
+        'id',
+        'title',
+        'price',
+        'description',
+        'category',
+        'images',
+        'creationAt',
+        'updatedAt'
+      ]);
+    });
+  })
+  
+  test("CP05|Validar que las propiedades principales tengan los tipos de datos esperados", () => {
+    const response = res.getBody();
+    response.forEach(product => {
+      expect(product.id).to.be.a('number');
+      expect(product.title).to.be.a('string');
+      expect(product.price).to.be.a('number');
+      expect(product.description).to.be.a('string');
+      expect(product.category).to.be.an('object');
+      expect(product.images).to.be.an('array');
+      expect(product.creationAt).to.be.a('string');
+      expect(product.updatedAt).to.be.a('string');
+    });
+  })
+  
+  test("CP06|Validar que el objeto category tenga las propiedades esperadas", () => {
+    const response = res.getBody();
+    response.forEach(product => {
+      const category = product.category;
+      expect(category).to.include.keys([
+        'id',
+        'name',
+        'image',
+        'creationAt',
+        'updatedAt'
+      ]);
+      expect(category.id).to.be.a('number');
+      expect(category.name).to.be.a('string');
+      expect(category.image).to.be.a('string');
+      expect(category.creationAt).to.be.a('string');
+      expect(category.updatedAt).to.be.a('string');
+    });
+  })
+}
