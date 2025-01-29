@@ -1,0 +1,55 @@
+meta {
+  name: isAvailable
+  type: http
+  seq: 5
+}
+
+post {
+  url: https://api.escuelajs.co/api/v1/users/is-available
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+  	"email": "maria@mail.com"
+  }
+}
+
+tests {
+  test("CP01|Validar que el método del request sea POST", () => {
+    const data = req.getMethod();
+    expect(data).to.equal('POST');
+  })
+  
+  test("CP02|Validar que el status de la respuesta sea 201", () => {
+    const data = res.getStatus();
+    expect(data).to.equal(201);
+  })
+  
+  test("CP03|Validar que el tiempo de respuesta sea menor a 2 segundos", () => {
+    const responseTime = res.getResponseTime();
+    expect(responseTime).to.be.lessThan(2000);
+  })
+  
+  test("CP04|Validar que la respuesta contenga la propiedad isAvailable", () => {
+    const response = res.getBody();
+    expect(response).to.be.an('object');
+    expect(response).to.include.keys([
+      'isAvailable'
+    ]);
+  })
+  
+  test("CP05|Validar que la propiedad isAvailable tenga el tipo de dato esperado", () => {
+    const response = res.getBody();
+    expect(response.isAvailable).to.be.a('boolean');
+  })
+  
+  test("CP06|Validar que el body del request contenga las propiedades necesarias", () => {
+    const requestBody = req.getBody();
+    expect(requestBody).to.include.keys([
+      'email'
+    ]);
+    expect(requestBody.email).to.be.a('string');
+  })
+}

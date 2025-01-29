@@ -1,0 +1,61 @@
+meta {
+  name: getAll
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://api.escuelajs.co/api/v1/users/
+  body: none
+  auth: none
+}
+
+tests {
+  test("CP01|Validar que el método del request sea GET", () => {
+    const data = req.getMethod();
+    expect(data).to.equal('GET');
+  })
+  
+  test("CP02|Validar que el status de la respuesta sea 200", () => {
+    const data = res.getStatus();
+    expect(data).to.equal(200);
+  })
+  
+  test("CP03|Validar que el tiempo de respuesta sea menor a 2 segundos", () => {
+    const responseTime = res.getResponseTime();
+    expect(responseTime).to.be.lessThan(2000);
+  })
+  
+  test("CP04|Validar que la respuesta sea un array", () => {
+    const response = res.getBody();
+    expect(response).to.be.an('array');
+  })
+  
+  test("CP05|Validar que cada elemento del array tenga las propiedades principales", () => {
+    const response = res.getBody();
+    response.forEach(user => {
+      expect(user).to.include.keys([
+        'id',
+        'name',
+        'email',
+        'password',
+        'avatar',
+        'creationAt',
+        'updatedAt'
+      ]);
+    });
+  })
+  
+  test("CP06|Validar que las propiedades principales tengan los tipos de datos esperados", () => {
+    const response = res.getBody();
+    response.forEach(user => {
+      expect(user.id).to.be.a('number');
+      expect(user.name).to.be.a('string');
+      expect(user.email).to.be.a('string');
+      expect(user.password).to.be.a('string');
+      expect(user.avatar).to.be.a('string');
+      expect(user.creationAt).to.be.a('string');
+      expect(user.updatedAt).to.be.a('string');
+    });
+  })
+}
