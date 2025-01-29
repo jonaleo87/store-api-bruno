@@ -1,0 +1,49 @@
+meta {
+  name: getOne
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://api.escuelajs.co/api/v1/categories/1
+  body: none
+  auth: none
+}
+
+tests {
+  test("CP01|Validar que el método del request sea GET", () => {
+    const data = req.getMethod();
+    expect(data).to.equal('GET');
+  })
+  
+  test("CP02|Validar que el status de la respuesta sea 200", () => {
+    const data = res.getStatus();
+    expect(data).to.equal(200);
+  })
+  
+  test("CP03|Validar que el tiempo de respuesta sea menor a 2 segundos", () => {
+    const responseTime = res.getResponseTime();
+    expect(responseTime).to.be.lessThan(2000);
+  })
+  
+  test("CP04|Validar que existan todas las propiedades principales de la respuesta", () => {
+    const response = res.getBody();
+    expect(response).to.be.an('object');
+    expect(response).to.include.keys([
+      'id',
+      'name',
+      'image',
+      'creationAt',
+      'updatedAt'
+    ]);
+  })
+  
+  test("CP05|Validar que las propiedades principales tengan los tipos de datos esperados", () => {
+    const response = res.getBody();
+    expect(response.id).to.be.a('number');
+    expect(response.name).to.be.a('string');
+    expect(response.image).to.be.a('string');
+    expect(response.creationAt).to.be.a('string');
+    expect(response.updatedAt).to.be.a('string');
+  })
+}
