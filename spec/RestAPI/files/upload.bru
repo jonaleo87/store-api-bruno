@@ -11,5 +11,32 @@ post {
 }
 
 body:multipart-form {
-  file: @file(/C:/Users/nicob/Downloads/Step3-graphic-1.png)
+  file: @file(src/Free_Test_Data_1MB_JPG.jpg)
+}
+
+tests {
+  test("CP01|Validar que el método del request sea POST", () => {
+    const data = req.getMethod();
+    expect(data).to.equal('POST');
+  })
+  
+  test("CP02|Validar que el status de la respuesta sea 201", () => {
+    const data = res.getStatus();
+    expect(data).to.equal(201);
+  })
+  
+  test("CP03|Validar que el tiempo de respuesta sea menor a 2 segundos", () => {
+    const responseTime = res.getResponseTime();
+    expect(responseTime).to.be.lessThan(2000);
+  })
+  
+  test("CP04|Validar que el body de la respuesta contenga las propiedades 'originalname', 'filename' y 'location'", () => {
+    const response = res.getBody();
+    expect(response).to.be.an('object');
+    expect(response).to.include.keys(['originalname', 'filename', 'location']);
+    expect(response.originalname).to.be.a('string');
+    expect(response.filename).to.be.a('string');
+    expect(response.location).to.be.a('string');
+  })
+  
 }
