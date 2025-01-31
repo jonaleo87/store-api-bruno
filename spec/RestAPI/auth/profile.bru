@@ -11,5 +11,61 @@ get {
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AbWFpbC5jb20iLCJzdWIiOjEsImlhdCI6MTY0OTg4MTQ2NiwiZXhwIjoxNjQ5ODg1MDY2fQ.yVveqqmu6u3lN2UK0McQcfU9-vh8T6iDb6y-mHPhyzA
+  token: {{authToken}}
+}
+
+tests {
+  test("CP01|Validar que el método del request sea GET", () => {
+    const data = req.getMethod();
+    expect(data).to.equal('GET');
+  })
+  
+  test("CP02|Validar que el status de la respuesta sea 200", () => {
+    const data = res.getStatus();
+    expect(data).to.equal(200);
+  })
+  
+  test("CP03|Validar que la respuesta contenga las propiedades necesarias", () => {
+    const responseBody = res.getBody();
+    expect(responseBody).to.include.keys([
+      'id',
+      'email',
+      'password',
+      'name',
+      'role',
+      'avatar',
+      'creationAt',
+      'updatedAt'
+    ]);
+  })
+  
+  test("CP04|Validar que las propiedades principales tengan los tipos de datos esperados", () => {
+    const responseBody = res.getBody();
+    expect(responseBody.id).to.be.a('number');
+    expect(responseBody.email).to.be.a('string');
+    expect(responseBody.password).to.be.a('string');
+    expect(responseBody.name).to.be.a('string');
+    expect(responseBody.role).to.be.a('string');
+    expect(responseBody.avatar).to.be.a('string');
+    expect(responseBody.creationAt).to.be.a('string');
+    expect(responseBody.updatedAt).to.be.a('string');
+  })
+  
+  test("CP05|Validar que el email tenga un formato correcto", () => {
+    const responseBody = res.getBody();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    expect(responseBody.email).to.match(emailRegex);
+  })
+  
+  test("CP06|Validar que la contraseña tenga un mínimo de 4 caracteres", () => {
+    const responseBody = res.getBody();
+    expect(responseBody.password.length).to.be.at.least(4);
+  })
+  
+  test("CP07|Validar que el encabezado Authorization tiene el Bearer Token", () => {
+          const headers = req.getHeaders();
+          expect(headers['Authorization']).to.include('Bearer ');
+        })
+  
+  
 }

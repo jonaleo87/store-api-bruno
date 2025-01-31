@@ -12,7 +12,63 @@ post {
 
 body:json {
   {
-  	"email": "john@mail.com",
-  	"password": "changeme"
+    "email": "john@mail.com",
+    "password": "changeme"
   }
+}
+
+script:post-response {
+   let response = res.getBody();
+    bru.setEnvVar("authToken", response.access_token);
+    bru.setEnvVar("refreshToken", response.refresh_token);
+}
+
+tests {
+  test("CP01|Validar que el método del request sea POST", () => {
+    const data = req.getMethod();
+    expect(data).to.equal('POST');
+  })
+  
+  test("CP02|Validar que el status de la respuesta sea 201", () => {
+    const data = res.getStatus();
+    expect(data).to.equal(201);
+  })
+  
+  test("CP03|Validar que el body del request contenga las propiedades necesarias", () => {
+    const requestBody = req.getBody();
+    expect(requestBody).to.include.keys([
+      'email',
+      'password'
+    ]);
+    expect(requestBody.email).to.be.a('string');
+    expect(requestBody.password).to.be.a('string');
+  })
+  
+  test("CP04|Validar que el email tenga un formato correcto", () => {
+    const requestBody = req.getBody();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    expect(requestBody.email).to.match(emailRegex);
+  })
+  
+  test("CP05|Validar que la contraseña tenga un mínimo de 4 caracteres", () => {
+    const requestBody = req.getBody();
+    expect(requestBody.password.length).to.be.at.least(4);
+  })
+  
+  test("CP06|Validar que la respuesta contenga un token de acceso y un token de refresco", () => {
+    const responseBody = res.getBody();
+    expect(responseBody).to.include.keys([
+      'access_token',
+      'refresh_token'
+    ]);
+    expect(responseBody.access_token).to.be.a('string');
+    expect(responseBody.refresh_token).to.be.a('string');
+  })
+  
+  test("CP07|Validar que los tokens tengan un formato correcto", () => {
+    const responseBody = res.getBody();
+    const tokenRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
+    expect(responseBody.access_token).to.match(tokenRegex);
+    expect(responseBody.refresh_token).to.match(tokenRegex);
+  })
 }

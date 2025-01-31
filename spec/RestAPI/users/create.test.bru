@@ -12,8 +12,8 @@ post {
 
 body:json {
   {
-    "name": "Nicolas",
-    "email": "nico@gmail.com",
+    "name": "Jonatan",
+    "email": "jona@gmail.com",
     "password": "12345",
       "avatar": "https://api.lorem.space/image/face?w=640&h=480"
   }
@@ -72,5 +72,16 @@ tests {
     expect(requestBody.email).to.be.a('string');
     expect(requestBody.password).to.be.a('string');
     expect(requestBody.avatar).to.be.a('string');
+  })
+
+    test("CP07|Validar que el email tenga un formato correcto", () => {
+    const requestBody = req.getBody();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    expect(requestBody.email).to.match(emailRegex);
+  })
+
+  test("CP08|Validar que la contraseña tenga un mínimo de 4 caracteres", () => {
+    const requestBody = req.getBody();
+    expect(requestBody.password.length).to.be.at.least(4);
   })
 }
