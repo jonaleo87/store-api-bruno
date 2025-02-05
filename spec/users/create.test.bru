@@ -1,7 +1,7 @@
 meta {
   name: create
   type: http
-  seq: 4
+  seq: 3
 }
 
 post {
@@ -17,6 +17,11 @@ body:json {
     "password": "12345",
       "avatar": "https://api.lorem.space/image/face?w=640&h=480"
   }
+}
+
+script:post-response {
+   let response = res.getBody();
+      bru.setEnvVar("userId", response.id);
 }
 
 tests {
@@ -73,13 +78,13 @@ tests {
     expect(requestBody.password).to.be.a('string');
     expect(requestBody.avatar).to.be.a('string');
   })
-
+  
     test("CP07|Validar que el email tenga un formato correcto", () => {
     const requestBody = req.getBody();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     expect(requestBody.email).to.match(emailRegex);
   })
-
+  
   test("CP08|Validar que la contraseña tenga un mínimo de 4 caracteres", () => {
     const requestBody = req.getBody();
     expect(requestBody.password.length).to.be.at.least(4);
