@@ -8,7 +8,7 @@ on:
 
 jobs:
   run-bruno-test:
-    runs-on: blacksmith
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -21,12 +21,11 @@ jobs:
 
       - name: Run Bruno API tests on TEST
         run: |
-          cd tests/api
           bru run --env TEST --output junit.xml --format junit
 
       - name: Publish Test Report
         uses: dorny/test-reporter@v2
-        if: success() || failure()
+        if: always()
         with:
           name: Test Report
           path: packages/bruno-tests/collection/junit.xml
