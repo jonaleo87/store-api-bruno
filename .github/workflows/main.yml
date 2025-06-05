@@ -1,0 +1,33 @@
+name: Run API Tests
+
+on:
+  push:
+    branches:
+      - main 
+  workflow_dispatch: {}
+
+jobs:
+  run-bruno-test:
+    runs-on: blacksmith
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+      - name: Install Bruno CLI
+        run: npm install -g @usebruno/cli
+
+      - name: Run Bruno API tests on TEST
+        run: |
+          cd tests/api
+          bru run --env TEST --output junit.xml --format junit
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v2
+        if: success() || failure()
+        with:
+          name: Test Report
+          path: packages/bruno-tests/collection/junit.xml
+          reporter: java-junit
