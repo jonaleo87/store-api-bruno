@@ -28,5 +28,5 @@ jobs:
         if: always()
         with:
           name: Test Report
-          path: packages/bruno-tests/collection/junit.xml
+          path: junit.xml
           reporter: java-junit
